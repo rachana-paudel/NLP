@@ -22,28 +22,34 @@ NLP/
 1. **Clone the repository**
 2. **Create a virtual environment (optional but recommended):**
    ```bash
-   python3 -m venv ner_crf
-   source ner_crf/bin/activate
+   python -m venv ner_crf
+   .\ner_crf\Scripts\Activate.ps1
    ```
 3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 4. **Download the CoNLL-2003 training data:**
-   ```bash
-   wget https://raw.githubusercontent.com/davidsbatista/NER-datasets/master/CONLL2003/train.txt -O eng.train
+   ```
+   import kagglehub
+
+   # Download latest version
+   path = kagglehub.dataset_download("alaakhaled/conll003-englishversion")
+
+   print("Path to dataset files:", path)
+
    ```
 
 ## Training the Model
 Run the following command to train the CRF model on the CoNLL-2003 dataset:
-```bash
+```
 python train_crf.py
 ```
 This will create a file named `crf_model.joblib` in the NLP directory.
 
 ## Running Predictions
 After training, you can run the prediction script:
-```bash
+```
 python run_crf.py
 ```
 You will be prompted to enter a sentence. The script will output each word and its predicted NER label in a table.
