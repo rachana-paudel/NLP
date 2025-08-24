@@ -3,6 +3,10 @@ import pandas as pd
 from sklearn_crfsuite import CRF
 import joblib
 
+# New imports for metrics and splitting
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, f1_score, recall_score
+
 def load_conll2003(path):
     sentences = []
     sentence = []
@@ -55,10 +59,31 @@ else:
     print('CoNLL-2003 train file not found.')
     exit(1)
 
-X_train = [sent2features(s) for s in train_sents]
-y_train = [sent2labels(s) for s in train_sents]
 
+# Split data into train and validation sets (80/20 split)
+train_sents_split, val_sents_split = train_test_split(train_sents, test_size=0.2, random_state=42)
+
+# Prepare features and labels
+X_train = [sent2features(s) for s in train_sents_split]
+y_train = [sent2labels(s) for s in train_sents_split]
+X_val = [sent2features(s) for s in val_sents_split]
+y_val = [sent2labels(s) for s in val_sents_split]
+
+# Train CRF
 crf = CRF(algorithm='lbfgs', max_iterations=100)
 crf.fit(X_train, y_train)
 joblib.dump(crf, MODEL_PATH)
 print(f"Model trained and saved to {MODEL_PATH}")
+
+# Predict on validation set
+y_pred = crf.predict(X_val)
+
+# Flatten lists for metrics
+flat_y_val = [label for sent in y_val for label in sent]
+flat_y_pred = [label for sent in y_pred for label in sent]
+
+# Print classification report, F1, and recall
+print("\nValidation Results:")
+print(classification_report(flat_y_val, flat_y_pred, digits=4))
+print(f"F1 Score (macro): {f1_score(flat_y_val, flat_y_pred, average='macro'):.4f}")
+print(f"Recall (macro): {recall_score(flat_y_val, flat_y_pred, average='macro'):.4f}")

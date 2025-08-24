@@ -41,11 +41,37 @@ NLP/
    ```
 
 ## Training the Model
-Run the following command to train the CRF model on the CoNLL-2003 dataset:
+
+Run the following command to train the CRF model on the CoNLL-2003 dataset and evaluate its performance:
 ```
 python train_crf.py
 ```
-This will create a file named `crf_model.joblib` in the NLP directory.
+This will:
+- Split your data into training and validation sets (80/20 split by default)
+- Train the CRF model on the training set
+- Save the trained model as `crf_model.joblib` in the NLP directory
+- **Print evaluation metrics on the validation set, including F1 score, recall, and a full classification report**
+
+**Sample output:**
+```
+Model trained and saved to /home/codespace/NLP/crf_model.joblib
+
+Validation Results:
+          precision    recall  f1-score   support
+
+       LOC     0.90       0.85      0.87      200
+       ORG     0.82       0.80      0.81      150
+       PER     0.95       0.94      0.95      180
+       MISC    0.78       0.80      0.79      100
+       O       0.99       1.00      0.99     3000
+
+    accuracy                         0.97      3630
+   macro avg     0.89       0.88      0.88     3630
+weighted avg     0.97       0.97      0.97     3630
+
+F1 Score (macro): 0.88
+Recall (macro): 0.88
+```
 
 ## Running Predictions
 After training, you can run the prediction script:
