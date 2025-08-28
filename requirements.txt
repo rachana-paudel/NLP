@@ -2,3 +2,4 @@ pandas
 sklearn_crfsuite
 joblib
 kagglehub
+scikit-learn
