@@ -3,3 +3,5 @@ sklearn_crfsuite
 joblib
 kagglehub
 scikit-learn
+matplotlib
+seaborn
